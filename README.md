@@ -2,7 +2,7 @@
 
 Projeto autoral de simulação de moda focado em sistemas de reputação, personalização de assets 3D assistida por IA e gestão de inventário social.
 
-🎮 **[Jogue o protótipo aqui](#)** —
+🎮 **[Jogue o protótipo aqui](https://maltamatos.github.io/dream-style-prototipo/)**
 
 ---
 
