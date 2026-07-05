@@ -2,7 +2,7 @@
 
 Projeto autoral de simulação de moda focado em sistemas de reputação, personalização de assets 3D assistida por IA e gestão de inventário social.
 
-🎮 **[Jogue o protótipo aqui](#)** — *(substitua este link pelo link do GitHub Pages ou itch.io depois de publicar)*
+🎮 **[Jogue o protótipo aqui](#)** —
 
 ---
 
