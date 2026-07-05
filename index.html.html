@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dream Style — Protótipo</title>
+<style>
+  /* ======================================================
+     PALETA E TIPOGRAFIA
+     Cores inspiradas no próprio portfólio: fundo verde-carvão
+     escuro, cartões em tom creme (como o fundo das fotos dos
+     looks) e um dourado como cor de destaque (joias/relógios).
+     ====================================================== */
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    --bg:            #182322;
+    --bg-soft:       #202e2c;
+    --panel:         #263634;
+    --panel-line:    #3a4c49;
+    --cream:         #f4efe4;
+    --cream-dim:     #e6ddc9;
+    --gold:          #c9a15a;
+    --gold-light:    #e3c583;
+    --text:          #ede7dc;
+    --text-dim:      #a9b7b2;
+    --good:          #9fb98a;
+    --bad:           #c98a6b;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background: radial-gradient(ellipse at top, var(--bg-soft), var(--bg) 70%);
+    color: var(--text);
+    font-family:'Inter', sans-serif;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 32px 16px;
+  }
+
+  .game{
+    width:100%;
+    max-width: 620px;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 4px;
+    overflow:hidden;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.45);
+  }
+
+  header.topbar{
+    padding: 22px 28px 18px;
+    border-bottom: 1px solid var(--panel-line);
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+  }
+
+  header.topbar h1{
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    letter-spacing: 0.04em;
+    font-size: 1.35rem;
+    margin:0;
+    text-transform: uppercase;
+  }
+
+  header.topbar span{
+    font-size:0.72rem;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  main{ padding: 28px; min-height: 380px; }
+
+  /* --- Tela: bloco de texto de introdução / narrativa --- */
+  .narrativa{
+    font-size:0.98rem;
+    line-height:1.6;
+    color: var(--text-dim);
+    margin-bottom: 22px;
+  }
+
+  .eyebrow{
+    font-size:0.7rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+    display:block;
+  }
+
+  h2.titulo-cena{
+    font-family:'Playfair Display', serif;
+    font-size:1.4rem;
+    font-weight:600;
+    margin: 0 0 14px;
+  }
+
+  /* --- Cartões de escolha de look --- */
+  .looks{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .look-card{
+    background: var(--cream);
+    color:#2a2a2a;
+    border-radius:3px;
+    padding: 14px 10px 16px;
+    cursor:pointer;
+    text-align:center;
+    border: 2px solid transparent;
+    transition: transform .15s ease, border-color .15s ease;
+  }
+
+  .look-card:hover{ transform: translateY(-3px); border-color: var(--gold); }
+
+  .look-swatch{
+    width:100%;
+    height:70px;
+    border-radius:2px;
+    margin-bottom:10px;
+  }
+
+  .look-card h3{
+    font-family:'Playfair Display', serif;
+    font-size:0.95rem;
+    margin:0 0 4px;
+  }
+
+  .look-card p{
+    font-size:0.72rem;
+    line-height:1.35;
+    color:#555;
+    margin:0;
+  }
+
+  /* --- Diálogo --- */
+  .npc-linha{
+    background: var(--bg-soft);
+    border-left: 3px solid var(--gold);
+    padding: 14px 16px;
+    border-radius: 2px;
+    font-size:0.92rem;
+    line-height:1.55;
+    margin-bottom: 18px;
+  }
+
+  .npc-nome{
+    display:block;
+    font-size:0.68rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color: var(--gold-light);
+    margin-bottom:6px;
+  }
+
+  .opcoes{ display:flex; flex-direction:column; gap:10px; }
+
+  .opcao{
+    background: transparent;
+    border: 1px solid var(--panel-line);
+    color: var(--text);
+    text-align:left;
+    padding: 12px 14px;
+    border-radius: 2px;
+    font-family:'Playfair Display', serif;
+    font-style: italic;
+    font-size:0.92rem;
+    cursor:pointer;
+    transition: border-color .15s ease, background .15s ease;
+  }
+
+  .opcao:hover{ border-color: var(--gold); background: rgba(201,161,90,0.08); }
+
+  /* --- Medidor de reputação --- */
+  .reputacao-bar{
+    margin-top: 22px;
+    padding-top:16px;
+    border-top:1px solid var(--panel-line);
+  }
+
+  .reputacao-label{
+    display:flex;
+    justify-content:space-between;
+    font-size:0.68rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color: var(--text-dim);
+    margin-bottom:6px;
+  }
+
+  .reputacao-track{
+    height:6px;
+    background: var(--bg-soft);
+    border-radius: 4px;
+    overflow:hidden;
+  }
+
+  .reputacao-fill{
+    height:100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    width:50%;
+    transition: width .4s ease;
+  }
+
+  /* --- Botões gerais --- */
+  .btn{
+    background: var(--gold);
+    color: #1c1c1c;
+    border:none;
+    padding: 12px 22px;
+    font-family:'Inter', sans-serif;
+    font-weight:600;
+    font-size:0.85rem;
+    letter-spacing:0.03em;
+    border-radius: 2px;
+    cursor:pointer;
+    margin-top: 22px;
+  }
+
+  .btn:hover{ background: var(--gold-light); }
+
+  .btn.secundario{
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--panel-line);
+  }
+
+  .feedback{
+    font-size: 0.8rem;
+    color: var(--gold-light);
+    margin-top: 10px;
+    min-height: 1.2em;
+    font-style: italic;
+  }
+
+  .escondido{ display:none; }
+
+  footer.rodape{
+    padding: 14px 28px;
+    border-top:1px solid var(--panel-line);
+    font-size:0.68rem;
+    color: var(--text-dim);
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<div class="game">
+  <header class="topbar">
+    <h1>Dream Style</h1>
+    <span>protótipo jogável</span>
+  </header>
+
+  <main id="tela"></main>
+
+  <footer class="rodape">Protótipo de portfólio · sistema de reputação e diálogo</footer>
+</div>
+
+<script>
+/* ==========================================================
+   ESTADO DO JOGO
+   Guardamos tudo que precisa ser lembrado entre as telas
+   dentro de um único objeto. Isso evita variáveis soltas
+   e facilita salvar/depurar o jogo depois.
+   ========================================================== */
+const estado = {
+  telaAtual: 'intro',
+  lookEscolhido: null,
+  reputacao: 50,      // começa neutro (0 a 100)
+  passoDialogo: 0
+};
+
+/* Dados dos 3 looks do seu portfólio.
+   'bonus' é só um valor estético usado no final para
+   decidir o "tom" do desfecho (autoridade / elegância / glamour). */
+const LOOKS = [
+  {
+    id: 'alfaiataria',
+    nome: 'Alfaiataria',
+    cor: '#2b2b2e',
+    descricao: 'Foco em autoridade e elegância.',
+    tom: 'autoridade'
+  },
+  {
+    id: 'social',
+    nome: 'Social',
+    cor: '#3a3a35',
+    descricao: 'Sofisticação clássica e presença em eventos.',
+    tom: 'elegancia'
+  },
+  {
+    id: 'noite',
+    nome: 'Noite',
+    cor: '#8a8378',
+    descricao: 'Glamour discreto, tecido nobre.',
+    tom: 'glamour'
+  }
+];
+
+/* Falas do diálogo, usando exatamente as frases do seu documento.
+   Cada opção tem um efeito na reputação, para simular o
+   "Decidir como responder a críticas/elogios" da sua tabela de Game Loop. */
+const DIALOGO = [
+  {
+    npc: 'Convidada da imprensa',
+    fala: 'Todos estão comentando o seu look hoje. O que você acha desse burburinho?',
+    opcoes: [
+      { texto: 'Prefiro deixar o resultado falar por si.', efeito: 5 },
+      { texto: 'Eu não disputo atenção — eu escolho onde estar.', efeito: 8 },
+      { texto: 'Obrigada. Eu valorizo a discrição.', efeito: 4 }
+    ]
+  },
+  {
+    npc: 'Convidada da imprensa',
+    fala: 'Alguns críticos acham seu estilo ousado demais para este evento. Como você responde?',
+    opcoes: [
+      { texto: 'Entendo seu ponto. Vou considerar.', efeito: 2 },
+      { texto: 'Talvez menos seja mais, hoje.', efeito: 6 },
+      { texto: 'Não preciso explicar. Basta observar.', efeito: 7 }
+    ]
+  }
+];
+
+/* ==========================================================
+   RENDERIZAÇÃO
+   Cada função "renderX" desenha uma tela inteira dentro de
+   #tela. Trocar de tela = chamar a próxima função.
+   ========================================================== */
+const tela = document.getElementById('tela');
+
+function renderIntro(){
+  tela.innerHTML = `
+    <span class="eyebrow">Evento — Gala de Lançamento</span>
+    <h2 class="titulo-cena">Escolha o look de Dream</h2>
+    <p class="narrativa">
+      As luzes do salão já estão acesas e os primeiros convidados chegam.
+      Antes de entrar, Dream precisa decidir com que presença quer marcar a noite —
+      cada look conversa com uma leitura diferente sobre ela.
+    </p>
+    <div class="looks">
+      ${LOOKS.map(look => `
+        <div class="look-card" onclick="escolherLook('${look.id}')">
+          <div class="look-swatch" style="background:${look.cor}"></div>
+          <h3>${look.nome}</h3>
+          <p>${look.descricao}</p>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function escolherLook(id){
+  estado.lookEscolhido = LOOKS.find(l => l.id === id);
+  estado.telaAtual = 'dialogo';
+  estado.passoDialogo = 0;
+  renderDialogo();
+}
+
+function renderDialogo(){
+  const passo = DIALOGO[estado.passoDialogo];
+
+  tela.innerHTML = `
+    <span class="eyebrow">Look: ${estado.lookEscolhido.nome}</span>
+    <h2 class="titulo-cena">Conversa no salão</h2>
+
+    <div class="npc-linha">
+      <span class="npc-nome">${passo.npc}</span>
+      "${passo.fala}"
+    </div>
+
+    <div class="opcoes">
+      ${passo.opcoes.map((op, i) => `
+        <button class="opcao" onclick="responder(${i})">"${op.texto}"</button>
+      `).join('')}
+    </div>
+
+    <div class="reputacao-bar">
+      <div class="reputacao-label">
+        <span>Reputação</span>
+        <span>${estado.reputacao}/100</span>
+      </div>
+      <div class="reputacao-track">
+        <div class="reputacao-fill" style="width:${estado.reputacao}%"></div>
+      </div>
+    </div>
+  `;
+}
+
+function responder(indice){
+  const efeito = DIALOGO[estado.passoDialogo].opcoes[indice].efeito;
+  estado.reputacao = Math.min(100, estado.reputacao + efeito);
+
+  if (estado.passoDialogo < DIALOGO.length - 1){
+    estado.passoDialogo++;
+    renderDialogo();
+  } else {
+    renderFinal();
+  }
+}
+
+function renderFinal(){
+  let titulo, texto;
+
+  if (estado.reputacao >= 70){
+    titulo = 'A referência da noite';
+    texto = `Dream atravessa o salão e sente os olhares mudarem de curiosidade para respeito.
+      O look ${estado.lookEscolhido.nome.toLowerCase()} fez exatamente o que deveria: falar antes dela.
+      "Não preciso explicar. Basta observar." — e, hoje, observaram.`;
+  } else if (estado.reputacao >= 50){
+    titulo = 'Boa impressão';
+    texto = `A noite passa sem tropeços. Dream não dominou a conversa do evento,
+      mas também não deu margem a nenhuma crítica séria. Um passo seguro, nada mais.`;
+  } else {
+    titulo = 'Noite incerta';
+    texto = `Algumas falas soaram mais defensivas do que Dream gostaria.
+      Ainda assim, ela sabe: "Se for importante, eu volto a falar com você."
+      Há outros eventos pela frente.`;
+  }
+
+  tela.innerHTML = `
+    <span class="eyebrow">Fim da cena</span>
+    <h2 class="titulo-cena">${titulo}</h2>
+    <p class="narrativa">${texto}</p>
+    <div class="reputacao-bar">
+      <div class="reputacao-label">
+        <span>Reputação final</span>
+        <span>${estado.reputacao}/100</span>
+      </div>
+      <div class="reputacao-track">
+        <div class="reputacao-fill" style="width:${estado.reputacao}%"></div>
+      </div>
+    </div>
+    <button class="btn" onclick="reiniciar()">Jogar novamente</button>
+  `;
+}
+
+function reiniciar(){
+  estado.telaAtual = 'intro';
+  estado.lookEscolhido = null;
+  estado.reputacao = 50;
+  estado.passoDialogo = 0;
+  renderIntro();
+}
+
+/* Torna as funções chamadas pelo HTML (onclick) visíveis globalmente */
+window.escolherLook = escolherLook;
+window.responder = responder;
+window.reiniciar = reiniciar;
+
+/* Primeira tela ao carregar */
+renderIntro();
+</script>
+
+</body>
+</html>
